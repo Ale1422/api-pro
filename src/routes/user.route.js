@@ -3,7 +3,7 @@ router = Router(),
 joi = require('joi'),
 validator = require('express-joi-validation').createValidator({}),
 { registerUser, loginUser, getInfoUser } = require('../controllers/user.controller'),
-validate = require('../middlewares/validate');
+userAuth = require('../middlewares/userAuth');
 
 const registerSchema = joi.object({
   name: joi.string()
@@ -37,7 +37,7 @@ const loginSchema = joi.object({
 
 router.post('/register', validator.body(registerSchema), registerUser);
 router.post('/login', validator.body(loginSchema), loginUser);
-router.get('/profile', validate, getInfoUser);
+router.get('/profile', userAuth, getInfoUser);
 
 
 

@@ -3,13 +3,13 @@ router = Router(),
 joi = require('joi'),
 validator = require('express-joi-validation').createValidator({}),
 { nuevoEquipo } = require('../controllers/equipo.controller'),
-validate = require('../middlewares/validate');
+userAuth = require('../middlewares/userAuth');
 
-const partidoModelo = joi.object({
+const equipoModelo = joi.object({
     nombre: joi.string().regex(/^[a-zA-Z\s]+$/).required(),
     grupo: joi.string().regex(/^[a-zA-Z\s]+$/).min(1).max(1).required()
 });
 
-router.post('/nuevo', validate, validator.body(partidoModelo), nuevoEquipo);
+router.post('/nuevo', userAuth, validator.body(equipoModelo), nuevoEquipo);
 
 module.exports = router;

@@ -28,7 +28,11 @@ module.exports = (sequelize) => {
     resultadoVisitante: {
         type: DataTypes.SMALLINT,
         defaultValue: 0
-      },    
+      },
+    resultado:{
+      type: DataTypes.ENUM,
+      values: ["Local", "Visitante", "Empate"]
+    },   
     fase: {
       type: DataTypes.ENUM,
       values:["Grupo", "Octavos", "Cuartos", "Semi", "Final"],
