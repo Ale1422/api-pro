@@ -1,19 +1,19 @@
-const {User, Partido} = require('../db');
+const {User, Partido, Equipo} = require('../db');
 
 const nuevoPartido = async (req, res, next) => {
     try {
         const id = req.user.id;
-        const isAdmin = await User.findOne({
+        const admin = await User.findOne({
             where: { id },
             attributes: { exclude: ["passwordHash"] },
-        }).isAdmin;
+        });
 
         const {localId, visitanteId, fecha, fase} = req.body;
         const partidoDb = await Partido.findOne({
-            where: {localId,visitanteId,fase}
+            where: {fase,localId, visitanteId}
         });
 
-        if(!partidoDb && isAdmin){
+        if(!partidoDb && admin.isAdmin){
             const partidoNuevo = await Partido.create({localId,visitanteId,fecha,fase})
             res.json(partidoNuevo) 
         }else{
@@ -28,25 +28,27 @@ const nuevoPartido = async (req, res, next) => {
 const actualizarPartido = async (req, res, next) => {
     try {
         const idUser = req.user.id;
-        const isAdmin = await User.findOne({
+        const user = await User.findOne({
             where: { id: idUser },
             attributes: { exclude: ["passwordHash"] },
-        }).isAdmin;
+        });
         
         const {
           id,
           resultadoLocal,
           resultadoVisitante,
           resultado,
+          fecha
         } = req.body;
         const partidoActualizar = await Partido.findOne({
             where: {id}
         });
         
-        if(partidoActualizar && isAdmin){
+        if(partidoActualizar && user.isAdmin){
             partidoActualizar.resultadoLocal = resultadoLocal;
             partidoActualizar.resultadoVisitante = resultadoVisitante;
             partidoActualizar.resultado = resultado;
+            partidoActualizar.fecha = fecha;
             await partidoActualizar.save();
             res.json(partidoActualizar);
         }else{
@@ -58,7 +60,29 @@ const actualizarPartido = async (req, res, next) => {
 
 }
 
+const getAll  = async (req, res, next ) =>{
+    try {
+        const partidosDB = await Partido.findAll({
+          include: [
+          {
+            model: Equipo,
+            as: "equipoLocal"
+          },
+          {
+            model: Equipo,
+            as: "equipoVisitante"
+          }
+        ]
+        });
+
+        res.send(partidosDB);
+      } catch (error) {
+        next(error)
+      }
+}
+
 module.exports={
     nuevoPartido,
-    actualizarPartido
+    actualizarPartido,
+    getAll
 }

@@ -26,7 +26,7 @@ module.exports = (sequelize) => {
       defaultValue: 0
     },
     puntaje: {
-        type: DataTypes.TINYINT,
+        type: DataTypes.SMALLINT,
         defaultValue: 0
       }
   });

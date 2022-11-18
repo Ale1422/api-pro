@@ -6,7 +6,7 @@ validator = require('express-joi-validation').createValidator({}),
 userAuth = require('../middlewares/userAuth');
 
 const equipoModelo = joi.object({
-    nombre: joi.string().regex(/^[a-zA-Z\s]+$/).required(),
+    nombre: joi.string().regex(/^[a-zA-ZñÑ\s]+$/).required(),
     grupo: joi.string().regex(/^[a-zA-Z\s]+$/).min(1).max(1).required()
 });
 

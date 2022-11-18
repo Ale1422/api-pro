@@ -1,7 +1,7 @@
 const {Router} = require('express'),
 joi = require('joi'),
 validator = require('express-joi-validation').createValidator({}),
-{nuevoPartido, actualizarPartido} = require('../controllers/partido.controller'),
+{nuevoPartido, actualizarPartido, getAll} = require('../controllers/partido.controller'),
 userAuth = require('../middlewares/userAuth');
 
 const router = Router();
@@ -22,5 +22,6 @@ const putModelo = joi.object({
 
 router.post('/nuevo', userAuth, validator.body(partidoModelo), nuevoPartido);
 router.put('/actualizar',userAuth, validator.body(putModelo), actualizarPartido);
+router.get('/all', getAll)
 
 module.exports = router

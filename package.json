@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon"
+    "start": "node index.js",
+    "dev":"nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +24,7 @@
     "jwt-decode": "^3.1.2",
     "morgan": "^1.10.0",
     "mysql2": "^2.3.3",
+    "pg": "^8.8.0",
     "sequelize": "^6.25.5"
   },
   "devDependencies": {

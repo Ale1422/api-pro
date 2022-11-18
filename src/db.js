@@ -2,14 +2,14 @@ require("dotenv").config();
 const { Sequelize, Op } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
-const { DB_USER, DB_PASSWORD, DB_HOST, DATABASE,DB_PORT } = process.env;
+const { DATABASE_URL } = process.env;
 
 const sequelize = new Sequelize(
-  `mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DATABASE}`,
+  `${DATABASE_URL}`,
   {
     logging: false, // set to console.log to see the raw SQL queries
     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-    dialect:'mysql'
+    dialect:'postgres'
   }
 );
 const basename = path.basename(__filename);
@@ -44,8 +44,8 @@ const {User, Equipo, Partido, Jugada } = sequelize.models;
 // Product.hasMany(Reviews);
 User.hasMany(Jugada,{as: "jugada", foreignKey:"userId"});
 
-Equipo.hasMany(Partido,{as: "partidolocal", foreignKey:"localId"});
-Equipo.hasMany(Partido,{as: "partidoVisitante", foreignKey:"visitanteId"});
+Partido.belongsTo(Equipo,{as: "equipoLocal", foreignKey:"localId"});
+Partido.belongsTo(Equipo,{as: "equipoVisitante", foreignKey:"visitanteId"});
 
 Partido.belongsToMany(Jugada, {through:"jugadaPartido"});
 Jugada.belongsToMany(Partido, {through:"jugadaPartido"});

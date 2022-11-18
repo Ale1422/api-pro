@@ -2,7 +2,7 @@ const { Router } = require('express'),
 router = Router(),
 joi = require('joi'),
 validator = require('express-joi-validation').createValidator({}),
-{ registerUser, loginUser, getInfoUser } = require('../controllers/user.controller'),
+{ registerUser, loginUser, getInfoUser,editUserAdmin } = require('../controllers/user.controller'),
 userAuth = require('../middlewares/userAuth');
 
 const registerSchema = joi.object({

@@ -62,8 +62,29 @@ const getInfoUser = async (req, res, next) => {
     }
 };
 
+const editUserAdmin = async (req, res, next) => {
+    try {
+        const id = req.user.id;
+        const user = await User.findOne({
+            where: { id },
+            attributes: { exclude: ["passwordHash"] },
+        });
+
+        if(user){
+            user.isAdmin = true
+            await user.save();
+            res.json(user);
+        }else{
+            res.status(404).send("No autorizado");
+        }
+    } catch (e) {
+        next(e);
+    }
+}
+
 module.exports = {
     registerUser,
     loginUser,
-    getInfoUser
+    getInfoUser,
+    editUserAdmin
 }
