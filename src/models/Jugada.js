@@ -28,6 +28,10 @@ module.exports = (sequelize) => {
     puntaje: {
         type: DataTypes.SMALLINT,
         defaultValue: 0
-      }
+    },
+    check:{
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   });
 };

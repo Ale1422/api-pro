@@ -37,6 +37,10 @@ module.exports = (sequelize) => {
       type: DataTypes.ENUM,
       values:["Grupo", "Octavos", "Cuartos", "Semi", "Final"],
       allowNull: false
+    },
+    checkFlag:{
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   });
 };

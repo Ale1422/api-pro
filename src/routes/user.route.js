@@ -38,6 +38,7 @@ const loginSchema = joi.object({
 router.post('/register', validator.body(registerSchema), registerUser);
 router.post('/login', validator.body(loginSchema), loginUser);
 router.get('/profile', userAuth, getInfoUser);
+//router.post('/admin', userAuth, editUserAdmin);
 
 
 
