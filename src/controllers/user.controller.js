@@ -32,7 +32,9 @@ const loginUser = async (req, res, next) => {
         const userForToken = {
             id: user.id,
             name: user.name,
+            lastName: user.lastName,
             email: user.email,
+            isAdmin: user.isAdmin,
             iss: "prodePicante",
         };
 
@@ -55,7 +57,6 @@ const getInfoUser = async (req, res, next) => {
             where: { id },
             attributes: { exclude: ["passwordHash"] },
         });
-
         res.send(user);
     } catch (e) {
         next(e);

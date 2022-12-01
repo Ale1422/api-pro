@@ -1,7 +1,7 @@
 const {Router} = require('express'),
 joi = require('joi'),
 validator = require('express-joi-validation').createValidator({}),
-{crearJugada, jugadasUsuario} = require('../controllers/jugada.controller'),
+{crearJugada, jugadasUsuario, checkearJugadas} = require('../controllers/jugada.controller'),
 userAuth = require('../middlewares/userAuth');
 
 const router = Router();
@@ -13,6 +13,7 @@ const jugadaModelo = joi.object({
 });
 
 router.post('/nueva', userAuth, validator.body(jugadaModelo), crearJugada);
-router.get('/jugadasusuario', userAuth, jugadasUsuario)
+router.get('/jugadasusuario', userAuth, jugadasUsuario);
+router.post('/check', userAuth, checkearJugadas);
 
 module.exports = router

@@ -2,22 +2,18 @@ const {User, Partido, Equipo} = require('../db');
 
 const nuevoPartido = async (req, res, next) => {
     try {
-        const id = req.user.id;
-        const admin = await User.findOne({
-            where: { id },
-            attributes: { exclude: ["passwordHash"] },
-        });
-
-        const {localId, visitanteId, fecha, fase} = req.body;
-        const partidoDb = await Partido.findOne({
-            where: {fase,localId, visitanteId}
-        });
-
-        if(!partidoDb && admin.isAdmin){
-            const partidoNuevo = await Partido.create({localId,visitanteId,fecha,fase})
-            res.json(partidoNuevo) 
-        }else{
-            res.status(404).send("Partido existente");
+        if(req.user.isAdmin){
+            const {localId, visitanteId, fecha, fase} = req.body;
+            const partidoDb = await Partido.findOne({
+                where: {fase,localId, visitanteId}
+            });
+    
+            if(!partidoDb){
+                const partidoNuevo = await Partido.create({localId,visitanteId,fecha,fase})
+                res.json(partidoNuevo) 
+            }else{
+                res.status(404).send("Partido existente");
+            }
         }
     } catch (error) {
         next(error)
@@ -27,33 +23,21 @@ const nuevoPartido = async (req, res, next) => {
 
 const actualizarPartido = async (req, res, next) => {
     try {
-        const idUser = req.user.id;
-        const user = await User.findOne({
-            where: { id: idUser },
-            attributes: { exclude: ["passwordHash"] },
-        });
-        
-        const {
-          id,
-          resultadoLocal,
-          resultadoVisitante,
-          resultado,
-          fecha
-        } = req.body;
-        const partidoActualizar = await Partido.findOne({
-            where: {id}
-        });
-        
-        if(partidoActualizar && user.isAdmin){
+        if (req.user.isAdmin) {
+          const { id, resultadoLocal, resultadoVisitante, resultado, fecha } =
+            req.body;
+          const partidoActualizar = await Partido.findByPk(id);
+
+          if (partidoActualizar) {
             partidoActualizar.resultadoLocal = resultadoLocal;
             partidoActualizar.resultadoVisitante = resultadoVisitante;
             partidoActualizar.resultado = resultado;
             partidoActualizar.fecha = fecha;
+            partidoActualizar.checkFlag = true;
             await partidoActualizar.save();
             res.json(partidoActualizar);
-        }else{
-            res.status(404).send("No autorizado");
-        }
+          } else res.status(404).send("No existe partido");
+        } else res.status(404).send("No autorizado");       
     } catch (error) {
         next(error)
     }
